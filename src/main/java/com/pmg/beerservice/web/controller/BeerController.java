@@ -1,91 +1,45 @@
 package com.pmg.beerservice.web.controller;
 
 import com.pmg.beerservice.model.Beer;
+import com.pmg.beerservice.services.BeerService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
 public class BeerController {
 
+    private BeerService beerService;
+
     @GetMapping("/beer")
     public ResponseEntity<List<Beer>> listBeers() {
-        Beer beer1 = Beer.builder()
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-
-        return new ResponseEntity<>(Arrays.asList(beer1), HttpStatus.OK);
+        return new ResponseEntity<>(beerService.getAllBeers(), HttpStatus.OK);
     }
 
     @GetMapping("beer/{beerId}")
     public ResponseEntity<Beer> getBeerById(@PathVariable UUID beerId) {
-
-        Beer beer1 = Beer.builder()
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-
-        return new ResponseEntity<>(beer1, HttpStatus.OK);
+        return new ResponseEntity<>(beerService.getBeerById(UUID.randomUUID()), HttpStatus.OK);
     }
 
     @GetMapping("beerUPC/{upc}")
     public ResponseEntity<Beer> getBeerByUPC(@PathVariable String upc) {
-        Beer beer1 = Beer.builder()
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-
-        return new ResponseEntity<>(beer1, HttpStatus.OK);
+        return new ResponseEntity<>(beerService.getBeerByUPC("123"), HttpStatus.OK);
     }
 
     @PostMapping("beer")
     public ResponseEntity<Beer> saveNewBeer(@RequestBody Beer beer) {
-        Beer beer1 = Beer.builder()
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-
-        return new ResponseEntity<Beer>(beer1, HttpStatus.CREATED);
+        return new ResponseEntity<Beer>(beerService.createBeer(beer), HttpStatus.CREATED);
     }
 
     @PutMapping("beer/{beerId}")
     public ResponseEntity updateBeer(@PathVariable UUID beerId, @RequestBody Beer beer) {
-        Beer beer1 = Beer.builder()
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-
-        return new ResponseEntity<Beer>(beer1, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Beer>(beerService.updateBeer(beerId, beer), HttpStatus.NO_CONTENT);
     }
-
 
 }
