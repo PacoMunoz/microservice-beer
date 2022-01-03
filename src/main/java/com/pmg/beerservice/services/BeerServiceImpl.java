@@ -1,7 +1,11 @@
 package com.pmg.beerservice.services;
 
-import com.pmg.beerservice.model.Beer;
+import com.pmg.beerservice.domain.Beer;
+import com.pmg.beerservice.web.mappers.BeerMapper;
+import com.pmg.beerservice.web.model.BeerDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -9,8 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class BeerServiceImpl implements BeerService {
+
+    private final BeerMapper beerMapper;
 
     @Override
     public List<Beer> getAllBeers() {
@@ -33,6 +40,8 @@ public class BeerServiceImpl implements BeerService {
                 .lastModifiedDate(Timestamp.from(Instant.now()))
                 .build();
 
+        BeerDto beerDto = beerMapper.beerToBeerDto(beer1);
+
         return Arrays.asList(beer1, beer2);
     }
 
@@ -47,6 +56,7 @@ public class BeerServiceImpl implements BeerService {
                 .createDate(Timestamp.from(Instant.now()))
                 .lastModifiedDate(Timestamp.from(Instant.now()))
                 .build();
+
         return beer1;
     }
 

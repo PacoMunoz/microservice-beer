@@ -1,6 +1,6 @@
 package com.pmg.beerservice.web.controller;
 
-import com.pmg.beerservice.model.Beer;
+import com.pmg.beerservice.domain.Beer;
 import com.pmg.beerservice.services.BeerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

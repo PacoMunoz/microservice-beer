@@ -1,4 +1,4 @@
-package com.pmg.beerservice.model;
+package com.pmg.beerservice.domain;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.pmg.beerservice.services;
 
-import com.pmg.beerservice.model.Beer;
+import com.pmg.beerservice.domain.Beer;
 
 import java.util.List;
 import java.util.UUID;
