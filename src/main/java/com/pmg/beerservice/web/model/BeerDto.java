@@ -1,6 +1,7 @@
 package com.pmg.beerservice.web.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,12 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class BeerDto implements Serializable {
 
     private static final long serialVersionUID = 1386601133886432425L;

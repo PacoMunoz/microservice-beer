@@ -4,7 +4,7 @@ import com.pmg.beerservice.domain.Beer;
 import com.pmg.beerservice.web.model.BeerDto;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {DateMapper.class})
 public interface BeerMapper {
 
     BeerDto beerToBeerDto(Beer beer);
