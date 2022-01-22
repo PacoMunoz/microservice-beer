@@ -1,14 +1,13 @@
 package com.pmg.beerservice.services;
 
 import com.pmg.beerservice.domain.Beer;
+import com.pmg.beerservice.repositories.BeerRespository;
 import com.pmg.beerservice.web.mappers.BeerMapper;
+import com.pmg.beerservice.web.model.BeerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,84 +17,44 @@ public class BeerServiceImpl implements BeerService {
 
     private final BeerMapper beerMapper;
 
-    @Override
-    public List<Beer> getAllBeers() {
-        Beer beer1 = Beer.builder()
-                .id(UUID.randomUUID())
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-        Beer beer2 = Beer.builder()
-                .id(UUID.randomUUID())
-                .beerName("Estrella Galicia")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
+    private final BeerRespository beerRespository;
 
-        return Arrays.asList(beer1, beer2);
+    @Override
+    public List<BeerDto> getAllBeers() {
+        List<BeerDto> beerDtos = new ArrayList<>();
+        beerRespository.findAll().forEach(beer -> {
+            beerDtos.add(beerMapper.beerToBeerDto(beer));
+        } );
+
+        return beerDtos;
     }
 
     @Override
-    public Beer getBeerById(UUID beerId) {
-        Beer beer1 = Beer.builder()
-                .id(UUID.randomUUID())
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-
-        return beer1;
+    public BeerDto getBeerById(UUID beerId) {
+        Beer beer = beerRespository.findById(beerId).orElse(null);
+        //return beer != null ? beerMapper.beerToBeerDto(beer) : null;
+        return beer != null ? beerMapper.beerToBeerDtoWithQuantity(beer) : null;
     }
 
     @Override
-    public Beer getBeerByUPC(String upc) {
-        Beer beer1 = Beer.builder()
-                .id(UUID.randomUUID())
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-        return beer1;
+    public BeerDto getBeerByUPC(String upc) {
+        Beer beer = beerRespository.findByUpc(upc).orElse(null);
+        return beer != null ? beerMapper.beerToBeerDto(beer) : null;
     }
 
     @Override
-    public Beer createBeer(Beer newBeer) {
-        Beer beer1 = Beer.builder()
-                .id(UUID.randomUUID())
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-        return beer1;
+    public BeerDto createBeer(BeerDto newBeer) {
+        return beerMapper.beerToBeerDto(beerRespository.save(beerMapper.beerDtoToBeer(newBeer)));
     }
 
     @Override
-    public Beer updateBeer(UUID beerId, Beer beer) {
-        Beer beer1 = Beer.builder()
-                .id(UUID.randomUUID())
-                .beerName("Cruzcampo")
-                .beerStyle("UTS")
-                .quantityToBrew(12)
-                .price(BigDecimal.valueOf(12.1))
-                .createDate(Timestamp.from(Instant.now()))
-                .lastModifiedDate(Timestamp.from(Instant.now()))
-                .build();
-        return beer1;
+    public BeerDto updateBeer(UUID beerId, BeerDto beer) {
+        Beer targetBeer =  beerRespository.findById(beerId).orElseThrow(RuntimeException::new);
+        targetBeer.setBeerName(beer.getBeerName());
+        targetBeer.setBeerStyle(beer.getBeerStyle());
+        targetBeer.setPrice(beer.getPrice());
+        targetBeer.setUpc(beer.getUpc());
+
+        return beerMapper.beerToBeerDto(beerRespository.save(targetBeer));
     }
 }
