@@ -5,15 +5,20 @@ import com.pmg.beerservice.services.inventory.BeerInventoryService;
 import com.pmg.beerservice.web.model.BeerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class BeerMapperDecorator implements BeerMapper{
+public abstract class BeerMapperDecorator implements BeerMapper{
 
-    @Autowired
+
     private BeerInventoryService beerInventoryService;
 
-    @Autowired
     private BeerMapper beerMapper;
 
-    public BeerMapperDecorator(BeerMapper beerMapper) {
+    @Autowired
+    public void setBeerInventoryService(BeerInventoryService beerInventoryService) {
+        this.beerInventoryService = beerInventoryService;
+    }
+
+    @Autowired
+    public void setBeerMapper(BeerMapper beerMapper) {
         this.beerMapper = beerMapper;
     }
 
