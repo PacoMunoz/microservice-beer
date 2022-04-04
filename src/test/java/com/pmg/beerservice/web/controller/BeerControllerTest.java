@@ -43,9 +43,9 @@ class BeerControllerTest {
 
     @Test
     void getBeerByUPC() throws Exception {
-        mockMvc.perform(get("/api/v1/beerUPC/aaw")).andDo(print())
+        mockMvc.perform(get("/api/v1/beerUPC/0631234200036")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().string(Matchers.containsString("Cruzcampo")));
     }
 
@@ -74,12 +74,11 @@ class BeerControllerTest {
 
         String updateBeer = new ObjectMapper().writeValueAsString(
                 Beer.builder()
-                        .id(UUID.randomUUID())
                         .beerName("Cruzcampo")
                         .beerStyle("Super")
                         .build());
 
-        mockMvc.perform(put("/api/v1/beer/016d07ad-4ec2-4a4f-9c72-1c69e2c85e1a")
+        mockMvc.perform(put("/api/v1/beer/0a818933-087d-47f2-ad83-2f986ed087eb")
                 .content(updateBeer)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

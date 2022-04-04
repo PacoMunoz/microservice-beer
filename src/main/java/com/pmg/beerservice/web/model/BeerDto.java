@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 public class BeerDto implements Serializable {
 
-    private static final long serialVersionUID = 1386601133886432425L;
+    private static final long serialVersionUID = 8554261096628967088L;
 
     // @Null -> the value at first must be null
     // mapStruct set the value after.

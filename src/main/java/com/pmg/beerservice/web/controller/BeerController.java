@@ -3,6 +3,7 @@ package com.pmg.beerservice.web.controller;
 import com.pmg.beerservice.services.BeerService;
 import com.pmg.beerservice.web.model.BeerDto;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,33 +13,40 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/api/v1")
 public class BeerController {
 
     private BeerService beerService;
 
     @GetMapping("/beer")
-    public ResponseEntity<List<BeerDto>> listBeers() {
-        return new ResponseEntity<List<BeerDto>>(beerService.getAllBeers(), HttpStatus.OK);
+    public ResponseEntity<List<BeerDto>> listBeers(@RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand) {
+        log.debug("Getting all beers.");
+        return new ResponseEntity<List<BeerDto>>(beerService.getAllBeers(showInventoryOnHand), HttpStatus.OK);
     }
 
     @GetMapping("beer/{beerId}")
-    public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId) {
-        return new ResponseEntity<>(beerService.getBeerById(beerId), HttpStatus.OK);
+    public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId,
+                                               @RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand) {
+        log.debug("Get beer by beerId : " + beerId);
+        return new ResponseEntity<>(beerService.getBeerById(beerId, showInventoryOnHand), HttpStatus.OK);
     }
 
     @GetMapping("beerUPC/{upc}")
     public ResponseEntity<BeerDto> getBeerByUPC(@PathVariable String upc) {
-        return new ResponseEntity<BeerDto>(beerService.getBeerByUPC("123"), HttpStatus.OK);
+        log.debug("Get beer by upc: " + upc);
+        return new ResponseEntity<BeerDto>(beerService.getBeerByUPC(upc), HttpStatus.OK);
     }
 
     @PostMapping("beer")
     public ResponseEntity<BeerDto> saveNewBeer(@RequestBody BeerDto beer) {
+        log.debug("Save new beer: " + beer.toString());
         return new ResponseEntity<BeerDto>(beerService.createBeer(beer), HttpStatus.CREATED);
     }
 
     @PutMapping("beer/{beerId}")
     public ResponseEntity updateBeer(@PathVariable UUID beerId, @RequestBody BeerDto beer) {
+        log.debug("Update beer: " + beerId + " with values: " + beer.toString());
         return new ResponseEntity<BeerDto>(beerService.updateBeer(beerId, beer), HttpStatus.NO_CONTENT);
     }
 

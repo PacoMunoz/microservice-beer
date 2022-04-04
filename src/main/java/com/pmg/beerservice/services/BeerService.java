@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface BeerService {
 
-    List<BeerDto> getAllBeers();
-    BeerDto getBeerById(UUID beerId);
+    List<BeerDto> getAllBeers(boolean showInventoryOnHand);
+    BeerDto getBeerById(UUID beerId, boolean showInventoryOnHand);
     BeerDto getBeerByUPC(String upc);
     BeerDto createBeer(BeerDto newBeer);
     BeerDto updateBeer(UUID beerId, BeerDto beer);
