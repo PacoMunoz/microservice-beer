@@ -2,8 +2,13 @@ package com.pmg.beerservice.web.controller;
 
 import com.pmg.beerservice.services.BeerService;
 import com.pmg.beerservice.web.model.BeerDto;
+import com.pmg.beerservice.web.model.BeerPagedList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +22,30 @@ import java.util.UUID;
 @RequestMapping("/api/v1")
 public class BeerController {
 
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = 25;
+    private static final String DEFAULT_SORT_BY = "id";
+
     private BeerService beerService;
 
     @GetMapping("/beer")
-    public ResponseEntity<List<BeerDto>> listBeers(@RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand) {
+    public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand,
+                                                   @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                                                   @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                                   @RequestParam(value = "sortBy", required = false) String sortBy) {
         log.debug("Getting all beers.");
-        return new ResponseEntity<List<BeerDto>>(beerService.getAllBeers(showInventoryOnHand), HttpStatus.OK);
+
+        if (pageNumber == null) {
+            pageNumber = DEFAULT_PAGE_NUMBER;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        if (sortBy == null) {
+            sortBy = DEFAULT_SORT_BY;
+        }
+
+        return new ResponseEntity<>(beerService.getAllBeers(showInventoryOnHand, PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))), HttpStatus.OK);
     }
 
     @GetMapping("beer/{beerId}")
