@@ -5,10 +5,13 @@ import com.pmg.beerservice.repositories.BeerRespository;
 import com.pmg.beerservice.web.controller.NotFoundException;
 import com.pmg.beerservice.web.mappers.BeerMapper;
 import com.pmg.beerservice.web.model.BeerDto;
+import com.pmg.beerservice.web.model.BeerPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,32 +34,31 @@ public class BeerServiceImpl implements BeerService {
             value = "allBeerCache",
             condition = "!#showInventoryOnHand"
     )
-    public List<BeerDto> getAllBeers(boolean showInventoryOnHand) {
+    public BeerPagedList getAllBeers(boolean showInventoryOnHand, Integer pageNumber, Integer pageSize) {
         log.debug("Service getAllBeers with showInventoryOnHand = " + showInventoryOnHand );
-        List<BeerDto> beerDtos;
-        List<Beer> beers;
-        /*if (showInventoryOnHand) {
-            beerRespository.findAll().forEach(beer -> {
-                beerDtos.add(beerMapper.beerToBeerDtoWithQuantity(beer));
-            } );
-        } else {
-            beerRespository.findAll().forEach(beer -> {
-                beerDtos.add(beerMapper.beerToBeerDto(beer));
-            } );
-        }*/
-        beers = beerRespository.findAll();
+        Page<Beer> beers;
+
+        beers = beerRespository.findAll(PageRequest.of(pageNumber, pageSize));
         if (showInventoryOnHand) {
-            beerDtos  = beers
-                    .stream()
-                    .map(beerMapper::beerToBeerDtoWithQuantity)
-                    .collect(Collectors.toList());
+            return new BeerPagedList(
+                    beers
+                        .getContent()
+                        .stream()
+                        .map(beerMapper::beerToBeerDtoWithQuantity)
+                        .collect(Collectors.toList()),
+                    PageRequest.of(pageNumber, pageSize),
+                    beers.getTotalElements());
         } else {
-            beerDtos = beers
-                    .stream()
-                    .map(beerMapper::beerToBeerDto)
-                    .collect(Collectors.toList());
+            return new BeerPagedList(
+                    beers
+                        .getContent()
+                        .stream()
+                        .map(beerMapper::beerToBeerDtoWithQuantity)
+                        .collect(Collectors.toList()),
+                    PageRequest.of(pageNumber, pageSize),
+                    beers.getTotalElements());
         }
-        return beerDtos;
+
     }
 
     @Override

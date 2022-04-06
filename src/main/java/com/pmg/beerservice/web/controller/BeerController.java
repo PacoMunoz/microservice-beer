@@ -2,6 +2,7 @@ package com.pmg.beerservice.web.controller;
 
 import com.pmg.beerservice.services.BeerService;
 import com.pmg.beerservice.web.model.BeerDto;
+import com.pmg.beerservice.web.model.BeerPagedList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,24 @@ import java.util.UUID;
 @RequestMapping("/api/v1")
 public class BeerController {
 
+    private static final Integer PAGE_NUMBER = 0;
+    private static final Integer PAGE_SIZE = 2;
     private BeerService beerService;
 
     @GetMapping("/beer")
-    public ResponseEntity<List<BeerDto>> listBeers(@RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand) {
+    public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand,
+                                                   @RequestParam(required = false) Integer pageNumber,
+                                                   @RequestParam(required = false) Integer pageSize) {
         log.debug("Getting all beers.");
-        return new ResponseEntity<List<BeerDto>>(beerService.getAllBeers(showInventoryOnHand), HttpStatus.OK);
+
+        if (pageNumber == null) {
+            pageNumber = PAGE_NUMBER;
+        }
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        return new ResponseEntity<>(beerService.getAllBeers(showInventoryOnHand, pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("beer/{beerId}")
