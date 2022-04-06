@@ -6,7 +6,7 @@
             http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
 
     <cache alias="allBeerCache">
-        <value-type>org.springframework.data.domain.Page</value-type>
+        <value-type>java.util.ArrayList</value-type>
         <expiry>
             <ttl unit="seconds">30</ttl>
         </expiry>
