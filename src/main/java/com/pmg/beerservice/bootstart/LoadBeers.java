@@ -23,7 +23,7 @@ public class LoadBeers implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        loadBeerData();
+       loadBeerData();
     }
 
     private void loadBeerData() {

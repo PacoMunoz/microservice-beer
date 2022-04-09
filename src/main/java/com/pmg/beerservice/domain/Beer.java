@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class Beer {
 
     private Long version;
 
-    private Timestamp createDate;
+    private Timestamp createdDate;
 
     private Timestamp lastModifiedDate;
 

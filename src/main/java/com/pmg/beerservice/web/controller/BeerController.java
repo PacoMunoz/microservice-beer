@@ -25,7 +25,9 @@ public class BeerController {
     @GetMapping("/beer")
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "showInventoryOnHand", required = false) boolean showInventoryOnHand,
                                                    @RequestParam(required = false) Integer pageNumber,
-                                                   @RequestParam(required = false) Integer pageSize) {
+                                                   @RequestParam(required = false) Integer pageSize,
+                                                   @RequestParam(required = false) String beerName,
+                                                   @RequestParam(required = false) String beerStyle) {
         log.debug("Getting all beers.");
 
         if (pageNumber == null) {
@@ -35,7 +37,7 @@ public class BeerController {
             pageSize = PAGE_SIZE;
         }
 
-        return new ResponseEntity<>(beerService.getAllBeers(showInventoryOnHand, pageNumber, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(beerService.getAllBeers(showInventoryOnHand, beerName, beerStyle, pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("beer/{beerId}")

@@ -9,13 +9,11 @@ import com.pmg.beerservice.web.model.BeerPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,11 +32,20 @@ public class BeerServiceImpl implements BeerService {
             value = "allBeerCache",
             condition = "!#showInventoryOnHand"
     )
-    public BeerPagedList getAllBeers(boolean showInventoryOnHand, Integer pageNumber, Integer pageSize) {
+    public BeerPagedList getAllBeers(boolean showInventoryOnHand, String beerName, String beerStyle, Integer pageNumber, Integer pageSize) {
         log.debug("Service getAllBeers with showInventoryOnHand = " + showInventoryOnHand );
         Page<Beer> beers;
 
-        beers = beerRespository.findAll(PageRequest.of(pageNumber, pageSize));
+        if (!ObjectUtils.isEmpty(beerName) && ObjectUtils.isEmpty(beerStyle)) {
+            beers = beerRespository.findAllByBeerNameAndAndBeerStyle(beerName, beerStyle, PageRequest.of(pageNumber, pageSize));
+        } else if (!ObjectUtils.isEmpty(beerName)) {
+            beers = beerRespository.findAllByBeerName(beerName, PageRequest.of(pageNumber, pageSize));
+        } else if (!ObjectUtils.isEmpty(beerStyle)) {
+            beers = beerRespository.findAllByBeerStyle(beerStyle, PageRequest.of(pageNumber, pageSize));
+        } else {
+            beers = beerRespository.findAll(PageRequest.of(pageNumber, pageSize));
+        }
+
         if (showInventoryOnHand) {
             return new BeerPagedList(
                     beers
@@ -53,7 +60,7 @@ public class BeerServiceImpl implements BeerService {
                     beers
                         .getContent()
                         .stream()
-                        .map(beerMapper::beerToBeerDtoWithQuantity)
+                        .map(beerMapper::beerToBeerDto)
                         .collect(Collectors.toList()),
                     PageRequest.of(pageNumber, pageSize),
                     beers.getTotalElements());
