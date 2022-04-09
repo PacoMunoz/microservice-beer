@@ -36,7 +36,7 @@ public class BeerServiceImpl implements BeerService {
         log.debug("Service getAllBeers with showInventoryOnHand = " + showInventoryOnHand );
         Page<Beer> beers;
 
-        if (!ObjectUtils.isEmpty(beerName) && ObjectUtils.isEmpty(beerStyle)) {
+        if (!ObjectUtils.isEmpty(beerName) && !ObjectUtils.isEmpty(beerStyle)) {
             beers = beerRespository.findAllByBeerNameAndAndBeerStyle(beerName, beerStyle, PageRequest.of(pageNumber, pageSize));
         } else if (!ObjectUtils.isEmpty(beerName)) {
             beers = beerRespository.findAllByBeerName(beerName, PageRequest.of(pageNumber, pageSize));
