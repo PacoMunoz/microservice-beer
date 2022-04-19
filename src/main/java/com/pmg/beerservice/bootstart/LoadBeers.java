@@ -3,12 +3,14 @@ package com.pmg.beerservice.bootstart;
 import com.pmg.beerservice.domain.Beer;
 import com.pmg.beerservice.repositories.BeerRespository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @AllArgsConstructor
+@Slf4j
 @Component
 public class LoadBeers implements CommandLineRunner {
 
@@ -29,36 +31,36 @@ public class LoadBeers implements CommandLineRunner {
     private void loadBeerData() {
         beerRespository.save(
             Beer.builder()
-            .id(BEER_1_UUID)
-            .beerName("Cruzcampo")
-            .beerStyle("Floja")
-            .minOnHand(12)
-            .quantityToBrew(50)
-            .upc(BEER_1_UPC)
-            .build()
+                // .id(BEER_1_UUID)
+                .beerName("Cruzcampo")
+                .beerStyle("Floja")
+                .minOnHand(12)
+                .quantityToBrew(50)
+                .upc(BEER_1_UPC)
+                .build()
         );
+        log.info("Cerveza 1 creada.");
         beerRespository.save(
-                Beer.builder()
-                        .id(BEER_2_UUID)
-                        .beerName("San Miguel")
-                        .beerStyle("Media")
-                        .minOnHand(20)
-                        .quantityToBrew(70)
-                        .upc(BEER_2_UPC)
-                        .build()
+            Beer.builder()
+                // .id(BEER_2_UUID)
+                .beerName("San Miguel")
+                .beerStyle("Media")
+                .minOnHand(20)
+                .quantityToBrew(70)
+                .upc(BEER_2_UPC)
+                .build()
         );
+        log.info("Cerveza 2 creada.");
         beerRespository.save(
-                Beer.builder()
-                        .id(BEER_3_UUID)
-                        .beerName("Mahou")
-                        .beerStyle("Fuerte")
-                        .minOnHand(30)
-                        .quantityToBrew(100)
-                        .upc(BEER_3_UPC)
-                        .build()
+            Beer.builder()
+                // .id(BEER_3_UUID)
+                .beerName("Mahou")
+                .beerStyle("Fuerte")
+                .minOnHand(30)
+                .quantityToBrew(100)
+                .upc(BEER_3_UPC)
+                .build()
         );
-
-
-
+        log.info("Cerveza 3 creada.");
     }
 }
