@@ -13,9 +13,9 @@ class BeerInventoryServiceRestTemplateImplTest {
     @Autowired
     private BeerInventoryService beerInventoryService;
 
-    @Test
+    /*@Test
     void getOnHandInventory() {
         Integer res = beerInventoryService.getOnHandInventory(UUID.fromString("0a818933-087d-47f2-ad83-2f986ed087eb"));
         Assertions.assertNotNull(res);
-    }
+    }*/
 }
