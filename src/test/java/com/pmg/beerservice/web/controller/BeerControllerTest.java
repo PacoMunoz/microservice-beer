@@ -1,7 +1,6 @@
 package com.pmg.beerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pmg.beerservice.domain.Beer;
 import com.pmg.beerservice.services.BeerService;
 import com.pmg.beerservice.web.model.BeerDto;
 import com.pmg.beerservice.web.model.BeerPagedList;
@@ -215,7 +214,7 @@ class BeerControllerTest {
 
         given(beerService.getBeerByUPC(anyString())).willReturn(beerMock1);
 
-        mockMvc.perform(get("/api/v1/beerUPC/" + anyString()).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/beerUPC/" + BEER_1_UPC).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -231,10 +230,13 @@ class BeerControllerTest {
         void updateBeer() throws Exception {
 
             BeerDto modifiedBeer = beerMock;
+            modifiedBeer.setId(null);
+            modifiedBeer.setCreatedDate(null);
+            modifiedBeer.setLastModifiedDate(null);
             modifiedBeer.setBeerName("Estrella Galicia");
             String updateBeer = objectMapper.writeValueAsString(modifiedBeer);
 
-            mockMvc.perform(put("/api/v1/beer/" + BEER_1_UUID)
+            mockMvc.perform(put("/api/v1/beer/" + BEER_1_UUID.toString())
                     .content(updateBeer)
                     .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
@@ -310,26 +312,6 @@ class BeerControllerTest {
             then(beerService).shouldHaveNoInteractions();
 
         }
-    }
-
-
-    @Test
-    void saveNewBeer() throws Exception {
-
-        BeerDto beerDto = beerMock;
-        beerDto.setId(UUID.randomUUID());
-        BeerDto savedBeer = beerDto.builder().id(UUID.randomUUID()).beerName("New Name").build();
-        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
-
-        given(beerService.createBeer(savedBeer)).willReturn(savedBeer);
-
-        mockMvc.perform(post("/api/v1/beer")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(beerDtoJson))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        then(beerService).should().createBeer(ArgumentMatchers.any(BeerDto.class));
     }
 
 }

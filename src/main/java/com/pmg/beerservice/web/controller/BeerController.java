@@ -76,7 +76,9 @@ public class BeerController {
         return new ResponseEntity<>(beerService.updateBeer(beerId, beer), HttpStatus.OK);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    // catch all exceptions of class type MethodArgumentNotValidException in the actual class
+    // could be replace by one controller Advice class -> see MvcExceptionHandler.class
+    /*@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List> validationErrorHandler(MethodArgumentNotValidException e){
         List<String> errors = new ArrayList<>(e.getErrorCount());
 
@@ -85,6 +87,6 @@ public class BeerController {
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
 }

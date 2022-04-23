@@ -11,7 +11,8 @@ import java.util.UUID;
 
 
 public interface BeerRespository extends PagingAndSortingRepository<Beer, UUID> {
-    Optional<Beer> findByUpc(String UPC);
+    // Optional<Beer> findByUpc(String UPC);
+    Optional<Beer> findBeerByUpc(String upc);
     Page<Beer> findAllByBeerName(String beerName, Pageable pageable);
     Page<Beer> findAllByBeerStyle(String beerStyle, Pageable pageable);
     Page<Beer> findAllByBeerNameAndAndBeerStyle(String beerName, String beerStyle, Pageable pageable);
