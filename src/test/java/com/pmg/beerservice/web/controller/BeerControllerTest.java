@@ -1,10 +1,12 @@
 package com.pmg.beerservice.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmg.beerservice.services.BeerService;
 import com.pmg.beerservice.web.model.BeerDto;
 import com.pmg.beerservice.web.model.BeerPagedList;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
@@ -13,10 +15,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +32,20 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+// change the RequestBuilder for RestDoc works.
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@SpringBootTest
 //@AutoConfigureMockMvc
 @WebMvcTest(BeerController.class)
+@ExtendWith(RestDocumentationExtension.class)
 class BeerControllerTest {
 
     @Autowired
@@ -56,22 +70,27 @@ class BeerControllerTest {
     BeerDto beerMock1;
 
     @BeforeEach
-    void setup() {
+    public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation))
+                .build();
+
         beerMock = BeerDto.builder()
-            .id(BEER_1_UUID)
-            .upc(BEER_1_UPC)
-            .beerName(BEER_1_NAME)
-            .beerStyle(BEER_1_STYLE)
-            .price(new BigDecimal(12))
-            .createdDate(OffsetDateTime.now())
-            .quantityOnHand(10)
-            .build();
+                .id(BEER_1_UUID)
+                .upc(BEER_1_UPC)
+                .beerName(BEER_1_NAME)
+                .beerStyle(BEER_1_STYLE)
+                .price(new BigDecimal(12.50))
+                .createdDate(OffsetDateTime.now())
+                .quantityOnHand(10)
+                // .localDate(LocalDate.now())
+                .build();
         beerMock1 = BeerDto.builder()
                 .id(BEER_2_UUID)
                 .upc(BEER_2_UPC)
                 .beerName(BEER_2_NAME)
                 .beerStyle(BEER_2_STYLE)
-                .price(new BigDecimal(12))
+                .price(new BigDecimal(12.05))
                 .quantityOnHand(10)
                 .build();
     }
@@ -198,12 +217,14 @@ class BeerControllerTest {
 
         given(beerService.getBeerById(ArgumentMatchers.any(UUID.class), anyBoolean())).willReturn(beerMock);
 
-        mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID()).accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.beerName", is(BEER_1_NAME)))
-                .andExpect(jsonPath("$.createdDate").isNotEmpty());
+        mockMvc.perform(get("/api/v1/beer/{beerId}", UUID.randomUUID()).accept(MediaType.APPLICATION_JSON))
+            .andDo(document("locations", pathParameters(
+                    parameterWithName("beerId").description("BeerId to search")
+            )))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.beerName", is(BEER_1_NAME)))
+            .andExpect(jsonPath("$.createdDate").isNotEmpty());
 
         then(beerService).should().getBeerById(ArgumentMatchers.any(UUID.class), anyBoolean());
 
@@ -312,6 +333,25 @@ class BeerControllerTest {
             then(beerService).shouldHaveNoInteractions();
 
         }
+    }
+
+    // testeamos la serializacion y desserializacion de json a objetos y viceversa.
+    // Utilizamos las anotaciones de jackson en la clase DTO para modelar el proceso a nuestro gusto.
+
+    @DisplayName("Json Serialization test")
+    @Test
+    void testJsonSerialization() throws JsonProcessingException {
+        String json = "{\"id\":\"0a818933-087d-47f2-ad83-2f986ed087eb\",\"version\":null,\"createdDate\":\"2022-05-17T06:18:53+0200\",\"lastModifiedDate\":null,\"beerName\":\"Cruzcampo\",\"beerStyle\":\"Suave\",\"upc\":\"0631234200036\",\"price\":12.5,\"quantityOnHand\":10}";
+        BeerDto beerDto = objectMapper.readValue(json, BeerDto.class);
+        System.out.println(beerDto);
+    }
+
+    @DisplayName("Json Deserialization")
+    @Test
+    void testJsonDeserialization() throws JsonProcessingException {
+        String json = objectMapper.writeValueAsString(beerMock);
+        System.out.println(json);
+
     }
 
 }

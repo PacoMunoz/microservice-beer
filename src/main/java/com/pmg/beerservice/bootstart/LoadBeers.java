@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -37,6 +38,7 @@ public class LoadBeers implements CommandLineRunner {
                 .minOnHand(12)
                 .quantityToBrew(50)
                 .upc(BEER_1_UPC)
+                .price(BigDecimal.valueOf(12.4))
                 .build()
         );
         log.info("Cerveza 1 creada.");
@@ -48,6 +50,7 @@ public class LoadBeers implements CommandLineRunner {
                 .minOnHand(20)
                 .quantityToBrew(70)
                 .upc(BEER_2_UPC)
+                .price(BigDecimal.valueOf(7.04))
                 .build()
         );
         log.info("Cerveza 2 creada.");
@@ -59,6 +62,7 @@ public class LoadBeers implements CommandLineRunner {
                 .minOnHand(30)
                 .quantityToBrew(100)
                 .upc(BEER_3_UPC)
+                .price(BigDecimal.valueOf(1.40))
                 .build()
         );
         log.info("Cerveza 3 creada.");

@@ -1,0 +1,6 @@
+include::{snippets}/locations/curl-request.adoc[]
+include::{snippets}/locations/http-response.adoc[]
+include::{snippets}/locations/httpie-request.adoc[]
+include::{snippets}/locations/request-body.adoc[]
+include::{snippets}/locations/response-body.adoc[]
+
