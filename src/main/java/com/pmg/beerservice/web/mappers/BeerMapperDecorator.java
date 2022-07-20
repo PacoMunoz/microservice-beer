@@ -2,7 +2,7 @@ package com.pmg.beerservice.web.mappers;
 
 import com.pmg.beerservice.domain.Beer;
 import com.pmg.beerservice.services.inventory.BeerInventoryService;
-import es.pmg.brewery.model.BeerDto;
+import com.pmg.brewery.model.BeerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BeerMapperDecorator implements BeerMapper{

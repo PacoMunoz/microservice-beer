@@ -4,8 +4,8 @@ import com.pmg.beerservice.domain.Beer;
 import com.pmg.beerservice.repositories.BeerRespository;
 import com.pmg.beerservice.web.controller.NotFoundException;
 import com.pmg.beerservice.web.mappers.BeerMapper;
-import es.pmg.brewery.model.BeerDto;
-import es.pmg.brewery.model.BeerPagedList;
+import com.pmg.brewery.model.BeerDto;
+import com.pmg.brewery.model.BeerPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,7 +17,8 @@ import org.springframework.util.ObjectUtils;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
+// @RequiredArgsConstructor permite que no haya que inicializar los atributos
+// definidos como private final utilizando un constructor.
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -28,6 +29,8 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRespository beerRespository;
 
     @Override
+    // configuracion de ehcache. En condition se dice que no se cacheara si el parametro showInventoryOnHand
+    // es true. Value indica el nombre de la configuracion individual en ehcache.xml
     @Cacheable(
             value = "allBeerCache",
             condition = "!#showInventoryOnHand"

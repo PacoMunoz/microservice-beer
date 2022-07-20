@@ -1,7 +1,7 @@
 package com.pmg.beerservice.services;
 
-import es.pmg.brewery.model.BeerDto;
-import es.pmg.brewery.model.BeerPagedList;
+import com.pmg.brewery.model.BeerDto;
+import com.pmg.brewery.model.BeerPagedList;
 
 import java.util.UUID;
 

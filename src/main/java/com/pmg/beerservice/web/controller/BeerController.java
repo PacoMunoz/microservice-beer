@@ -1,8 +1,8 @@
 package com.pmg.beerservice.web.controller;
 
 import com.pmg.beerservice.services.BeerService;
-import es.pmg.brewery.model.BeerDto;
-import es.pmg.brewery.model.BeerPagedList;
+import com.pmg.brewery.model.BeerDto;
+import com.pmg.brewery.model.BeerPagedList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class BeerController {
 
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 2;
-    private BeerService beerService;
+    private final BeerService beerService;
 
     @GetMapping("/beer")
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "showInventoryOnHand", required = false)

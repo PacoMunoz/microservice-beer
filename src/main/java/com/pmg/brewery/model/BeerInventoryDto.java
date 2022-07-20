@@ -1,4 +1,4 @@
-package es.pmg.brewery.model;
+package com.pmg.brewery.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

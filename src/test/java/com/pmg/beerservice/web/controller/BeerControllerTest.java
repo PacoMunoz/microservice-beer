@@ -3,8 +3,8 @@ package com.pmg.beerservice.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmg.beerservice.services.BeerService;
-import com.pmg.beerservice.web.model.BeerDto;
-import com.pmg.beerservice.web.model.BeerPagedList;
+import com.pmg.brewery.model.BeerDto;
+import com.pmg.brewery.model.BeerPagedList;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,7 +23,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;

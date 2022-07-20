@@ -6,7 +6,7 @@
             http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
 
     <cache alias="allBeerCache">
-        <value-type>com.pmg.beerservice.web.model.BeerPagedList</value-type>
+        <value-type>com.pmg.brewery.model.BeerPagedList</value-type>
         <expiry>
             <ttl unit="seconds">30</ttl>
         </expiry>
@@ -29,7 +29,7 @@
 
     <cache alias="beerByIdCache">
         <key-type>java.util.UUID</key-type>
-        <value-type>com.pmg.beerservice.web.model.BeerDto</value-type>
+        <value-type>com.pmg.brewery.model.BeerDto</value-type>
         <expiry>
             <ttl unit="seconds">30</ttl>
         </expiry>
@@ -49,6 +49,4 @@
             <offheap unit="MB">10</offheap>
         </resources>
     </cache>
-
-
 </config>

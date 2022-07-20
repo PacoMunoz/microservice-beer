@@ -1,4 +1,4 @@
-package es.pmg.brewery.model;
+package com.pmg.brewery.model;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
