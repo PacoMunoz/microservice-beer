@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -50,6 +51,10 @@ public class BeerOrderLineDto implements Serializable {
     private String upc;
     private String beerName;
     private String beerStyle;
+
+    @NotNull
+    @Positive
+    private Integer orderQuantity;
 
     @Null
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
