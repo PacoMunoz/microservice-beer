@@ -47,7 +47,7 @@ public class BeerOrderDto implements Serializable {
 
     @Null
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String orderStatus;
+    private String orderStatusEnum;
     private String orderStatusCallbackUrl;
 
 }
