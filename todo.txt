@@ -1,0 +1,23 @@
+- Mapeos en BeerOrder
+        -> problema al mapear los beerOrderLine dentro de los beerOrder
+        -> dentro del beerOrderMapperImpl el beerOrderLineMapperImpl llega vacio.
+
+	- Probar mapear solo beerOrderLine -> Esto si funciona
+	- Probar la annotation de mapper que excluya el mapeo del beerOrderLine. -> Esto tambien funciona.
+	- Probar incluir en el contexto de pruebas el mapper del elemento hijo. -> He utilizado ReflectionTestUtil de Spring
+	-------------- Solucionado -------------
+
+	- Voy por el Test de BeerOrderMapper
+
+- test en todos los proyectos.
+	- test en beer_service -> OK
+	- test en beer_repository -> OK
+
+- Sacar de cada metodo de los controllers el path que contiene la version
+
+
+--- NOTAS ----
+
+- Me gustaría que el modelo de datos o dto's que se comparten entre los servicio se pudiera tener como un proyecto a parte
+  que se modifique en un sitio unicamente en lugar de tener que tocar las clases en casa servicio.
+- Cerntain, this data are very coupled to the code so don't can be packet in a independent pack.
