@@ -1,6 +1,8 @@
 package com.pmg.brewery.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
@@ -9,6 +11,8 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Data
+@Builder
 public class BeerInventoryDto implements Serializable {
 
     private static final long serialVersionUID = 4578399603011178803L;
